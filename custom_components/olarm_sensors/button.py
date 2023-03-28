@@ -4,7 +4,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.const import CONF_DEVICE_ID
-from .const import CONF_DEVICE_NAME
+from .const import CONF_DEVICE_NAME, get_domain
 from .const import CONF_DEVICE_MAKE
 from .const import LOGGER
 from .const import DOMAIN
@@ -92,7 +92,7 @@ class PGMButtonEntity(Entity):
     @property
     def unique_id(self) -> str:
         """Return the unique ID for this entity."""
-        return self.coordinator.entry.data[CONF_DEVICE_ID] + "_pgm_" + self.sensor_name
+        return f"{get_domain(self.coordinator.entry)}_pgm_{self.sensor_name}".replace(" ", "").lower()
 
     @property
     def should_poll(self):
@@ -174,7 +174,7 @@ class PGMButtonEntity(Entity):
             "name": f"Olarm Sensors ({self.coordinator.entry.data[CONF_DEVICE_NAME]})",
             "manufacturer": "Olarm Integration",
             "model": f"{self.coordinator.entry.data[CONF_DEVICE_MAKE]}",
-            "identifiers": {(DOMAIN, self.coordinator.entry.data[CONF_DEVICE_ID])},
+            "identifiers": {(get_domain(self.coordinator.entry), self.coordinator.entry.data[CONF_DEVICE_ID])},
             "sw_version": VERSION,
             "hw_version": "Not Implemented",
         }
@@ -242,7 +242,7 @@ class UKeyButtonEntity(Entity):
             "name": f"Olarm Sensors ({self.coordinator.entry.data[CONF_DEVICE_NAME]})",
             "manufacturer": "Olarm Integration",
             "model": f"{self.coordinator.entry.data[CONF_DEVICE_MAKE]}",
-            "identifiers": {(DOMAIN, self.coordinator.entry.data[CONF_DEVICE_ID])},
+            "identifiers": {(get_domain(self.coordinator.entry), self.coordinator.entry.data[CONF_DEVICE_ID])},
             "sw_version": VERSION,
             "hw_version": "Not Implemented",
         }

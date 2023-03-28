@@ -1,12 +1,13 @@
 import logging
 
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     STATE_ALARM_ARMED_AWAY,
     STATE_ALARM_ARMED_NIGHT,
     STATE_ALARM_ARMING,
     STATE_ALARM_TRIGGERED,
     STATE_ALARM_ARMED_HOME,
-    STATE_ALARM_DISARMED,
+    STATE_ALARM_DISARMED, CONF_DEVICE_ID,
 )
 
 DOMAIN = "olarm_sensors"
@@ -43,6 +44,11 @@ OLARM_CHANGE_TO_HA = {
 }
 
 VERSION = "1.1.2"
+
+def get_domain(config_entry: ConfigEntry) -> str:
+    """Return a unique domain for the given config entry."""
+    instance_id = config_entry.data[CONF_DEVICE_ID].split("-")[0]
+    return f"{DOMAIN}_{instance_id}"
 
 
 class AlarmPanelArea:

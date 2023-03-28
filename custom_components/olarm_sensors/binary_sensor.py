@@ -10,9 +10,9 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 import logging
 import datetime
-from .const import CONF_DEVICE_NAME
+from .const import CONF_DEVICE_NAME, get_domain
 from .const import CONF_DEVICE_MAKE
-from .const import LOGGER, DOMAIN
+from .const import LOGGER
 from .const import VERSION
 from homeassistant.const import CONF_DEVICE_ID
 
@@ -133,9 +133,9 @@ class OlarmSensor(BinarySensorEntity):
     @property
     def unique_id(self):
         """
-        DOCSTRING: The unique id for this entity sothat it can be managed from the ui.
+        DOCSTRING: The unique id for this entity so that it can be managed from the ui.
         """
-        return f"olarm_sensor_{self.sensor_name}".replace(" ", "").lower()
+        return f"{get_domain(self.coordinator.entry)}_{self.sensor_name}".replace(" ", "").lower()
 
     @property
     def name(self):
@@ -233,7 +233,7 @@ class OlarmSensor(BinarySensorEntity):
             "name": f"Olarm Sensors ({self.coordinator.entry.data[CONF_DEVICE_NAME]})",
             "manufacturer": "Olarm Integration",
             "model": f"{self.coordinator.entry.data[CONF_DEVICE_MAKE]}",
-            "identifiers": {(DOMAIN, self.coordinator.entry.data[CONF_DEVICE_ID])},
+            "identifiers": {(get_domain(self.coordinator.entry), self.coordinator.entry.data[CONF_DEVICE_ID])},
             "sw_version": VERSION,
             "hw_version": "Not Implemented",
         }
@@ -290,9 +290,9 @@ class OlarmPanelState(BinarySensorEntity):
     @property
     def unique_id(self):
         """
-        DOCSTRING: The unique id for this entity sothat it can be managed from the ui.
+        DOCSTRING: The unique id for this entity so that it can be managed from the ui.
         """
-        return f"olarm_panel_{self.sensor_name}".replace(" ", "").lower()
+        return f"{get_domain(self.coordinator.entry)}_{self.sensor_name}".replace(" ", "").lower()
 
     @property
     def name(self):
@@ -343,7 +343,7 @@ class OlarmPanelState(BinarySensorEntity):
             "name": f"Olarm Sensors ({self.coordinator.entry.data[CONF_DEVICE_NAME]})",
             "manufacturer": "Olarm Integration",
             "model": f"{self.coordinator.entry.data[CONF_DEVICE_MAKE]}",
-            "identifiers": {(DOMAIN, self.coordinator.entry.data[CONF_DEVICE_ID])},
+            "identifiers": {(get_domain(self.coordinator.entry), self.coordinator.entry.data[CONF_DEVICE_ID])},
             "sw_version": VERSION,
             "hw_version": "Not Implemented",
         }
@@ -391,9 +391,9 @@ class OlarmBypassSensor(BinarySensorEntity):
     @property
     def unique_id(self):
         """
-        DOCSTRING: The unique id for this entity sothat it can be managed from the ui.
+        DOCSTRING: The unique id for this entity so that it can be managed from the ui.
         """
-        return f"olarm_sensor_{self.sensor_name}".replace(" ", "").lower()
+        return f"{get_domain(self.coordinator.entry)}_{self.sensor_name}".replace(" ", "").lower()
 
     @property
     def name(self):
@@ -454,7 +454,7 @@ class OlarmBypassSensor(BinarySensorEntity):
             "name": f"Olarm Sensors ({self.coordinator.entry.data[CONF_DEVICE_NAME]})",
             "manufacturer": "Olarm Integration",
             "model": f"{self.coordinator.entry.data[CONF_DEVICE_MAKE]}",
-            "identifiers": {(DOMAIN, self.coordinator.entry.data[CONF_DEVICE_ID])},
+            "identifiers": {(get_domain(self.coordinator.entry), self.coordinator.entry.data[CONF_DEVICE_ID])},
             "sw_version": VERSION,
             "hw_version": "Not Implemented",
         }

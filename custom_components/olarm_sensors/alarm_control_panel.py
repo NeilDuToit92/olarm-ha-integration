@@ -15,7 +15,7 @@ from homeassistant.core import callback
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from .const import ALARM_STATE_TO_HA
+from .const import ALARM_STATE_TO_HA, get_domain
 from .const import CONF_ALARM_CODE
 from .const import DOMAIN
 from .const import LOGGER
@@ -33,17 +33,17 @@ async def async_setup_entry(
     async_add_entities: Callable[[Iterable[Entity]], None],
 ) -> None:
     """Set up Olarm alarm control panel from a config entry."""
-    LOGGER.debug("olarm_panel -> async_setup_entry")
+    LOGGER.debug("olarm_sensors -> async_setup_entry")
 
     entities = []
-    coordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator = hass.data[get_domain(entry)][entry.entry_id]
 
     panel_states = await coordinator.get_panel_states()
 
     area = 1
     for sensor in panel_states:
         sensor = OlarmAlarm(
-            coordinator=hass.data[DOMAIN][entry.entry_id],
+            coordinator=hass.data[get_domain(entry)][entry.entry_id],
             sensor_name=sensor["name"],
             state=sensor["state"],
             area=area,
@@ -100,7 +100,7 @@ class OlarmAlarm(CoordinatorEntity, AlarmControlPanelEntity):
             "name": f"Olarm Sensors ({self.coordinator.entry.data[CONF_DEVICE_NAME]})",
             "manufacturer": "Olarm Integration",
             "model": f"{self.coordinator.entry.data[CONF_DEVICE_MAKE]}",
-            "identifiers": {(DOMAIN, self.coordinator.entry.data[CONF_DEVICE_ID])},
+            "identifiers": {(get_domain(self.coordinator.entry), self.coordinator.entry.data[CONF_DEVICE_ID])},
             "sw_version": VERSION,
             "hw_version": "Not Implemented",
         }
